@@ -1,0 +1,4 @@
+  File "train_band.sh", line 1
+    python3 -u train_cifar_band.py --resize 32 > band_resize_32_train.log 2>&1
+               ^
+SyntaxError: invalid syntax

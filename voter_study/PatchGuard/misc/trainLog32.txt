@@ -1,0 +1,277 @@
+nohup: ignoring input
+==> Preparing data..
+Files already downloaded and verified
+Files already downloaded and verified
+==> Building model..
+
+Epoch: 0
+[W TensorIterator.cpp:918] Warning: Mixed memory format inputs detected while calling the operator. The operator will output contiguous tensor even if some of the inputs are in channels_last format. (function operator())
+loss: 2.570, acc: 0.000, batch:0, total batch:6250 
+loss: 2.014, acc: 26.478, batch:625, total batch:6250 
+loss: 1.878, acc: 30.955, batch:1250, total batch:6250 
+loss: 1.777, acc: 34.642, batch:1875, total batch:6250 
+loss: 1.712, acc: 37.505, batch:2500, total batch:6250 
+loss: 1.658, acc: 39.675, batch:3125, total batch:6250 
+loss: 1.614, acc: 41.596, batch:3750, total batch:6250 
+loss: 1.579, acc: 42.976, batch:4375, total batch:6250 
+loss: 1.548, acc: 44.234, batch:5000, total batch:6250 
+loss: 1.519, acc: 45.345, batch:5625, total batch:6250 
+Saving..
+15.97
+
+Epoch: 1
+loss: 1.110, acc: 62.500, batch:0, total batch:6250 
+loss: 1.269, acc: 55.511, batch:625, total batch:6250 
+loss: 1.259, acc: 55.865, batch:1250, total batch:6250 
+loss: 1.242, acc: 56.683, batch:1875, total batch:6250 
+loss: 1.229, acc: 57.132, batch:2500, total batch:6250 
+loss: 1.225, acc: 57.094, batch:3125, total batch:6250 
+loss: 1.220, acc: 57.275, batch:3750, total batch:6250 
+loss: 1.215, acc: 57.350, batch:4375, total batch:6250 
+loss: 1.209, acc: 57.633, batch:5000, total batch:6250 
+loss: 1.206, acc: 57.763, batch:5625, total batch:6250 
+Saving..
+28.24
+
+Epoch: 2
+loss: 0.988, acc: 62.500, batch:0, total batch:6250 
+loss: 1.176, acc: 59.145, batch:625, total batch:6250 
+loss: 1.154, acc: 59.742, batch:1250, total batch:6250 
+loss: 1.141, acc: 60.128, batch:1875, total batch:6250 
+loss: 1.135, acc: 60.216, batch:2500, total batch:6250 
+loss: 1.134, acc: 60.257, batch:3125, total batch:6250 
+loss: 1.133, acc: 60.364, batch:3750, total batch:6250 
+loss: 1.135, acc: 60.380, batch:4375, total batch:6250 
+loss: 1.131, acc: 60.580, batch:5000, total batch:6250 
+loss: 1.130, acc: 60.551, batch:5625, total batch:6250 
+Saving..
+32.35
+
+Epoch: 3
+loss: 1.389, acc: 25.000, batch:0, total batch:6250 
+loss: 1.081, acc: 62.041, batch:625, total batch:6250 
+loss: 1.084, acc: 62.150, batch:1250, total batch:6250 
+loss: 1.087, acc: 62.127, batch:1875, total batch:6250 
+loss: 1.088, acc: 62.040, batch:2500, total batch:6250 
+loss: 1.092, acc: 61.800, batch:3125, total batch:6250 
+loss: 1.089, acc: 61.990, batch:3750, total batch:6250 
+loss: 1.092, acc: 61.877, batch:4375, total batch:6250 
+loss: 1.091, acc: 61.803, batch:5000, total batch:6250 
+loss: 1.091, acc: 61.856, batch:5625, total batch:6250 
+20.72
+
+Epoch: 4
+loss: 1.455, acc: 37.500, batch:0, total batch:6250 
+loss: 1.064, acc: 63.159, batch:625, total batch:6250 
+loss: 1.061, acc: 63.289, batch:1250, total batch:6250 
+loss: 1.068, acc: 63.240, batch:1875, total batch:6250 
+loss: 1.070, acc: 63.055, batch:2500, total batch:6250 
+loss: 1.064, acc: 63.236, batch:3125, total batch:6250 
+loss: 1.065, acc: 63.166, batch:3750, total batch:6250 
+loss: 1.061, acc: 63.320, batch:4375, total batch:6250 
+loss: 1.063, acc: 63.215, batch:5000, total batch:6250 
+loss: 1.063, acc: 63.198, batch:5625, total batch:6250 
+Saving..
+38.29
+
+Epoch: 5
+loss: 1.086, acc: 62.500, batch:0, total batch:6250 
+loss: 1.054, acc: 63.199, batch:625, total batch:6250 
+loss: 1.051, acc: 63.100, batch:1250, total batch:6250 
+loss: 1.050, acc: 63.306, batch:1875, total batch:6250 
+loss: 1.052, acc: 63.200, batch:2500, total batch:6250 
+loss: 1.051, acc: 63.204, batch:3125, total batch:6250 
+loss: 1.052, acc: 63.180, batch:3750, total batch:6250 
+loss: 1.050, acc: 63.240, batch:4375, total batch:6250 
+loss: 1.046, acc: 63.467, batch:5000, total batch:6250 
+loss: 1.043, acc: 63.649, batch:5625, total batch:6250 
+Saving..
+47.29
+
+Epoch: 6
+loss: 0.885, acc: 75.000, batch:0, total batch:6250 
+loss: 1.018, acc: 64.597, batch:625, total batch:6250 
+loss: 1.014, acc: 65.018, batch:1250, total batch:6250 
+loss: 1.018, acc: 64.699, batch:1875, total batch:6250 
+loss: 1.020, acc: 64.664, batch:2500, total batch:6250 
+loss: 1.024, acc: 64.555, batch:3125, total batch:6250 
+loss: 1.022, acc: 64.679, batch:3750, total batch:6250 
+loss: 1.021, acc: 64.674, batch:4375, total batch:6250 
+loss: 1.023, acc: 64.640, batch:5000, total batch:6250 
+loss: 1.021, acc: 64.704, batch:5625, total batch:6250 
+38.71
+
+Epoch: 7
+loss: 0.722, acc: 87.500, batch:0, total batch:6250 
+loss: 1.024, acc: 63.998, batch:625, total batch:6250 
+loss: 1.011, acc: 64.848, batch:1250, total batch:6250 
+loss: 1.008, acc: 65.065, batch:1875, total batch:6250 
+loss: 1.009, acc: 64.874, batch:2500, total batch:6250 
+loss: 1.011, acc: 64.931, batch:3125, total batch:6250 
+loss: 1.012, acc: 64.893, batch:3750, total batch:6250 
+loss: 1.011, acc: 65.002, batch:4375, total batch:6250 
+loss: 1.012, acc: 64.907, batch:5000, total batch:6250 
+loss: 1.012, acc: 64.962, batch:5625, total batch:6250 
+Saving..
+48.08
+
+Epoch: 8
+loss: 0.870, acc: 62.500, batch:0, total batch:6250 
+loss: 0.990, acc: 65.276, batch:625, total batch:6250 
+loss: 0.989, acc: 65.787, batch:1250, total batch:6250 
+loss: 0.985, acc: 65.772, batch:1875, total batch:6250 
+loss: 0.993, acc: 65.379, batch:2500, total batch:6250 
+loss: 0.999, acc: 65.291, batch:3125, total batch:6250 
+loss: 1.002, acc: 65.229, batch:3750, total batch:6250 
+loss: 0.996, acc: 65.422, batch:4375, total batch:6250 
+loss: 0.999, acc: 65.297, batch:5000, total batch:6250 
+loss: 0.999, acc: 65.280, batch:5625, total batch:6250 
+Saving..
+54.55
+
+Epoch: 9
+loss: 0.573, acc: 75.000, batch:0, total batch:6250 
+loss: 0.989, acc: 66.573, batch:625, total batch:6250 
+loss: 0.999, acc: 65.588, batch:1250, total batch:6250 
+loss: 1.007, acc: 65.185, batch:1875, total batch:6250 
+loss: 0.999, acc: 65.534, batch:2500, total batch:6250 
+loss: 0.999, acc: 65.411, batch:3125, total batch:6250 
+loss: 1.002, acc: 65.399, batch:3750, total batch:6250 
+loss: 1.000, acc: 65.465, batch:4375, total batch:6250 
+loss: 1.000, acc: 65.467, batch:5000, total batch:6250 
+loss: 0.998, acc: 65.422, batch:5625, total batch:6250 
+23.26
+
+Epoch: 10
+loss: 0.662, acc: 62.500, batch:0, total batch:6250 
+loss: 0.836, acc: 71.845, batch:625, total batch:6250 
+loss: 0.816, acc: 72.602, batch:1250, total batch:6250 
+loss: 0.792, acc: 73.228, batch:1875, total batch:6250 
+loss: 0.786, acc: 73.336, batch:2500, total batch:6250 
+loss: 0.774, acc: 73.716, batch:3125, total batch:6250 
+loss: 0.768, acc: 73.957, batch:3750, total batch:6250 
+loss: 0.762, acc: 74.249, batch:4375, total batch:6250 
+loss: 0.756, acc: 74.443, batch:5000, total batch:6250 
+loss: 0.750, acc: 74.602, batch:5625, total batch:6250 
+Saving..
+75.5
+
+Epoch: 11
+loss: 1.217, acc: 75.000, batch:0, total batch:6250 
+loss: 0.692, acc: 76.597, batch:625, total batch:6250 
+loss: 0.696, acc: 76.569, batch:1250, total batch:6250 
+loss: 0.694, acc: 76.513, batch:1875, total batch:6250 
+loss: 0.694, acc: 76.354, batch:2500, total batch:6250 
+loss: 0.696, acc: 76.400, batch:3125, total batch:6250 
+loss: 0.691, acc: 76.540, batch:3750, total batch:6250 
+loss: 0.691, acc: 76.591, batch:4375, total batch:6250 
+loss: 0.688, acc: 76.662, batch:5000, total batch:6250 
+loss: 0.687, acc: 76.646, batch:5625, total batch:6250 
+Saving..
+76.37
+
+Epoch: 12
+loss: 0.975, acc: 50.000, batch:0, total batch:6250 
+loss: 0.648, acc: 77.935, batch:625, total batch:6250 
+loss: 0.653, acc: 77.698, batch:1250, total batch:6250 
+loss: 0.659, acc: 77.292, batch:1875, total batch:6250 
+loss: 0.655, acc: 77.484, batch:2500, total batch:6250 
+loss: 0.652, acc: 77.543, batch:3125, total batch:6250 
+loss: 0.650, acc: 77.576, batch:3750, total batch:6250 
+loss: 0.650, acc: 77.728, batch:4375, total batch:6250 
+loss: 0.652, acc: 77.649, batch:5000, total batch:6250 
+loss: 0.652, acc: 77.726, batch:5625, total batch:6250 
+Saving..
+77.33
+
+Epoch: 13
+loss: 0.977, acc: 62.500, batch:0, total batch:6250 
+loss: 0.635, acc: 78.095, batch:625, total batch:6250 
+loss: 0.621, acc: 78.737, batch:1250, total batch:6250 
+loss: 0.620, acc: 78.778, batch:1875, total batch:6250 
+loss: 0.623, acc: 78.649, batch:2500, total batch:6250 
+loss: 0.625, acc: 78.515, batch:3125, total batch:6250 
+loss: 0.626, acc: 78.456, batch:3750, total batch:6250 
+loss: 0.625, acc: 78.516, batch:4375, total batch:6250 
+loss: 0.628, acc: 78.432, batch:5000, total batch:6250 
+loss: 0.627, acc: 78.464, batch:5625, total batch:6250 
+64.54
+
+Epoch: 14
+loss: 0.475, acc: 87.500, batch:0, total batch:6250 
+loss: 0.598, acc: 79.553, batch:625, total batch:6250 
+loss: 0.597, acc: 79.516, batch:1250, total batch:6250 
+loss: 0.604, acc: 79.258, batch:1875, total batch:6250 
+loss: 0.606, acc: 79.293, batch:2500, total batch:6250 
+loss: 0.610, acc: 79.143, batch:3125, total batch:6250 
+loss: 0.611, acc: 79.066, batch:3750, total batch:6250 
+loss: 0.610, acc: 79.150, batch:4375, total batch:6250 
+loss: 0.611, acc: 79.182, batch:5000, total batch:6250 
+loss: 0.611, acc: 79.177, batch:5625, total batch:6250 
+73.21
+
+Epoch: 15
+loss: 0.592, acc: 87.500, batch:0, total batch:6250 
+loss: 0.577, acc: 81.370, batch:625, total batch:6250 
+loss: 0.582, acc: 80.835, batch:1250, total batch:6250 
+loss: 0.588, acc: 80.457, batch:1875, total batch:6250 
+loss: 0.586, acc: 80.258, batch:2500, total batch:6250 
+loss: 0.590, acc: 80.190, batch:3125, total batch:6250 
+loss: 0.589, acc: 80.185, batch:3750, total batch:6250 
+loss: 0.593, acc: 80.062, batch:4375, total batch:6250 
+loss: 0.594, acc: 80.081, batch:5000, total batch:6250 
+loss: 0.593, acc: 80.039, batch:5625, total batch:6250 
+Saving..
+77.5
+
+Epoch: 16
+loss: 0.558, acc: 75.000, batch:0, total batch:6250 
+loss: 0.551, acc: 81.969, batch:625, total batch:6250 
+loss: 0.569, acc: 81.105, batch:1250, total batch:6250 
+loss: 0.576, acc: 80.830, batch:1875, total batch:6250 
+loss: 0.577, acc: 80.643, batch:2500, total batch:6250 
+loss: 0.583, acc: 80.354, batch:3125, total batch:6250 
+loss: 0.583, acc: 80.282, batch:3750, total batch:6250 
+loss: 0.586, acc: 80.156, batch:4375, total batch:6250 
+loss: 0.587, acc: 80.109, batch:5000, total batch:6250 
+loss: 0.588, acc: 80.052, batch:5625, total batch:6250 
+76.29
+
+Epoch: 17
+loss: 0.459, acc: 87.500, batch:0, total batch:6250 
+loss: 0.580, acc: 80.431, batch:625, total batch:6250 
+loss: 0.575, acc: 80.805, batch:1250, total batch:6250 
+loss: 0.569, acc: 80.844, batch:1875, total batch:6250 
+loss: 0.570, acc: 80.843, batch:2500, total batch:6250 
+loss: 0.571, acc: 80.790, batch:3125, total batch:6250 
+loss: 0.572, acc: 80.635, batch:3750, total batch:6250 
+loss: 0.571, acc: 80.644, batch:4375, total batch:6250 
+loss: 0.574, acc: 80.531, batch:5000, total batch:6250 
+loss: 0.572, acc: 80.597, batch:5625, total batch:6250 
+75.35
+
+Epoch: 18
+loss: 0.280, acc: 100.000, batch:0, total batch:6250 
+loss: 0.561, acc: 81.330, batch:625, total batch:6250 
+loss: 0.560, acc: 81.165, batch:1250, total batch:6250 
+loss: 0.554, acc: 81.217, batch:1875, total batch:6250 
+loss: 0.556, acc: 81.093, batch:2500, total batch:6250 
+loss: 0.553, acc: 81.178, batch:3125, total batch:6250 
+loss: 0.558, acc: 81.028, batch:3750, total batch:6250 
+loss: 0.559, acc: 80.996, batch:4375, total batch:6250 
+loss: 0.560, acc: 80.846, batch:5000, total batch:6250 
+loss: 0.562, acc: 80.677, batch:5625, total batch:6250 
+72.77
+
+Epoch: 19
+loss: 0.638, acc: 87.500, batch:0, total batch:6250 
+loss: 0.534, acc: 82.188, batch:625, total batch:6250 
+loss: 0.542, acc: 81.645, batch:1250, total batch:6250 
+loss: 0.544, acc: 81.463, batch:1875, total batch:6250 
+loss: 0.547, acc: 81.417, batch:2500, total batch:6250 
+loss: 0.551, acc: 81.238, batch:3125, total batch:6250 
+loss: 0.554, acc: 81.215, batch:3750, total batch:6250 
+loss: 0.556, acc: 81.207, batch:4375, total batch:6250 
+loss: 0.556, acc: 81.099, batch:5000, total batch:6250 
+loss: 0.560, acc: 81.008, batch:5625, total batch:6250 
+57.45
