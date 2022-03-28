@@ -50,7 +50,9 @@ class RandomPatch(object):
 
 
 class MNISTDataLoader(DataLoader):
-    def __init__(self, data_dir, split='train', image_size=28, batch_size=16, num_workers=1, shuffle=None):
+    def __init__(self, data_dir, split='train', image_size=28, batch_size=16, num_workers=1, shuffle=None, skip=None):
+        if skip is not None:
+            raise NotImplementedError
         if split == 'train':
             train = True
             transform = transforms.Compose([
@@ -76,7 +78,10 @@ class MNISTDataLoader(DataLoader):
 
 
 class CIFAR10DataLoader(DataLoader):
-    def __init__(self, data_dir, split='train', image_size=224, mask_size=-1, batch_size=16, num_workers=8, shuffle=None):
+    def __init__(self, data_dir, split='train', image_size=224, mask_size=-1, 
+                 batch_size=16, num_workers=8, shuffle=None, skip=None):
+        if skip is not None:
+            raise NotImplementedError
         if split == 'train':
             train = True
             transform = transforms.Compose([
@@ -107,7 +112,8 @@ class CIFAR10DataLoader(DataLoader):
 
 
 class CIFAR100DataLoader(DataLoader):
-    def __init__(self, data_dir, split='train', image_size=224, mask_size=-1, batch_size=16, num_workers=8, shuffle=None):
+    def __init__(self, data_dir, split='train', image_size=224, mask_size=-1, 
+                 batch_size=16, num_workers=8, shuffle=None, skip=None):
         if split == 'train':
             train = True
             transform = transforms.Compose([
@@ -188,6 +194,7 @@ class ImageNetDataLoader(DataLoader):
                 transform=transform,
                 is_valid_file=is_valid_file
             )
+            self.dataset = ImageNet_File(self.dataset)
             if self.skip is not None:
                 skips = list(range(0, len(self.dataset), self.skip))
                 self.dataset = torch.utils.data.Subset(self.dataset, skips)

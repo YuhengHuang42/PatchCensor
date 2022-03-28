@@ -32,7 +32,7 @@ def get_train_config():
     parser.add_argument("--num-classes", type=int, default=1000, help="number of classes in dataset")
     parser.add_argument("--no-verify", action='store_true', default=False, help="test without verification")
     parser.add_argument("--result", type=str, default=None, help="where to save the result")
-    #parser.add_argument("--skip", default=None, type=int, help="number of example to skip")
+    parser.add_argument("--skip", default=None, type=int, help="number of example to skip")
     config = parser.parse_args()
 
     # models config
@@ -100,7 +100,8 @@ def evaluate(model, config, device=torch.device('cpu')):
         batch_size=1,
         num_workers=config.num_workers,
         split=split,
-        special_data_flag=special_data_flag
+        special_data_flag=special_data_flag,
+        skip=config.skip
         )
     img_mask, attn_mask = gen_mask(
         img_size=config.image_size,
@@ -117,22 +118,26 @@ def evaluate(model, config, device=torch.device('cpu')):
     verified_list = list()
     verified_correct_list = list()
     if isinstance(dl, ImageNetDataLoader) and special_data_flag == None:
-        ds = dl.dataset
-        samples = ds.samples
-        num_samples = len(samples)
+        #ds = dl.dataset
+        #samples = ds.samples
+        num_samples = len(dl)
         # from timm.data import resolve_data_config
         # from timm.data.transforms_factory import create_transform
         # config = resolve_data_config({}, models=models)
         # config['is_training'] = False
         # transform = create_transform(**config)
-        transform = ds.transform
-        for i, (path, target) in enumerate(samples):
+        #transform = ds.transform
+        for i, all_data in enumerate(dl):
+            path = all_data[2]
+            sample = all_data[0]
+            target = all_data[1]
             try:
                 file_list.append(path)
-                sample = ds.loader(path)
-                if transform is not None:
-                    sample = transform(sample)
-                img = sample.unsqueeze(0).to(device)
+                #sample = ds.loader(path)
+                #if transform is not None:
+                #    sample = transform(sample)
+                #img = sample.unsqueeze(0).to(device)
+                img = sample.to(device)
                 majority_pred, verified, preds = verify_inference(model, img, img_mask, attn_mask, use_attn_mask)
                 correct = preds[0].cpu().item() == target
                 correct_list.append(correct)
