@@ -46,6 +46,6 @@ Detailed commands to setup environment and run experiments can be found in `test
 
 ## Acknowledgement
 
-We refer to [PatchGuard](https://github.com/inspire-group/PatchGuard) for the implementation of PatchGuard
-
+We refer to [PatchGuard](https://github.com/inspire-group/PatchGuard) for the implementation of PatchGuard and [PatchSmoothing](https://github.com/alevine0/patchSmoothing)
+for the implementation of (De)Randomized Smoothing for Certifiable Defense against Patch Attacks.
 
