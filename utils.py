@@ -118,6 +118,8 @@ def load_model(model_arch, num_classes, checkpoint_path):
         model = create_model(model_name='swsl_resnet50', pretrained=True, num_classes=num_classes)
     # elif model_arch == 'ResNet20_32':
     #     model = torch.hub.load("chenyaofo/pytorch-cifar-models", "cifar10_resnet20", pretrained=True)
+    elif model_arch == 'ViT_b32_224':
+        model = create_model(model_name="vit_base_patch32_224", pretrained=True, num_classes=num_classes)
     else:
         print(f'unknown model arch: {model_arch}')
         return None

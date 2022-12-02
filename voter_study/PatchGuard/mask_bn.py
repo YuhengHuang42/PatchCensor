@@ -55,7 +55,7 @@ def get_dataset(ds,data_dir):
         class_names = dataset_.classes
         dataset_ = ImageNet_File(dataset_)
         if ds == "PartImageNet":
-            dataset_ = PartImageNet(dataset_)
+            dataset_ = PartImageNet(dataset_.imagenet_folder)
     elif ds == 'cifar':
         ds_transforms = transforms.Compose([
             transforms.Resize(192, interpolation=PIL.Image.BICUBIC),

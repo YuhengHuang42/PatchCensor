@@ -9,7 +9,7 @@ from timm.data.transforms_factory import create_transform
 import numpy as np
 import tarfile
 from PIL import Image
-from PatchGuard.dataset_utils import PartImageNet
+from voter_study.PatchGuard.dataset_utils import PartImageNet
 
 __all__ = ['MNISTDataLoader', 'CIFAR10DataLoader', 'ImageNetDataLoader', 'CIFAR100DataLoader']
 

@@ -33,6 +33,7 @@ def get_train_config():
     parser.add_argument("--no-verify", action='store_true', default=False, help="test without verification")
     parser.add_argument("--result", type=str, default=None, help="where to save the result")
     parser.add_argument("--skip", default=None, type=int, help="number of example to skip")
+    #parser.add_argument("--num_subset", default=None, type=int, help="Only sample a subset of the dataset with length to num_subset")
     config = parser.parse_args()
 
     # models config

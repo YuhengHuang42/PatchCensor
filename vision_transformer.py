@@ -30,7 +30,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 
 from timm.data import IMAGENET_DEFAULT_MEAN, IMAGENET_DEFAULT_STD
-from timm.models.helpers import build_model_with_cfg, overlay_external_default_cfg
+from timm.models.helpers import build_model_with_cfg #, overlay_external_default_cfg
 from timm.models.layers import DropPath, to_2tuple, trunc_normal_, lecun_normal_
 from timm.models.registry import register_model
 
@@ -431,7 +431,7 @@ def checkpoint_filter_fn(state_dict, model):
 def _create_vision_transformer(variant, pretrained=False, default_cfg=None, **kwargs):
     if default_cfg is None:
         default_cfg = deepcopy(default_cfgs[variant])
-    overlay_external_default_cfg(default_cfg, kwargs)
+    #overlay_external_default_cfg(default_cfg, kwargs)
     default_num_classes = default_cfg['num_classes']
     default_img_size = default_cfg['input_size'][-2:]
 
@@ -449,7 +449,7 @@ def _create_vision_transformer(variant, pretrained=False, default_cfg=None, **kw
 
     model = build_model_with_cfg(
         VisionTransformer, variant, pretrained,
-        default_cfg=default_cfg,
+        pretrained_cfg=default_cfg,
         img_size=img_size,
         num_classes=num_classes,
         representation_size=repr_size,
