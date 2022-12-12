@@ -9,6 +9,7 @@ import pandas as pd
 import torch
 from vision_transformer import _create_vision_transformer
 from timm.models import create_model
+from timm.models.vision_transformer import vit_small_patch16_224, vit_base_patch32_224, vit_base_patch16_224, vit_large_patch16_224, vit_base_patch32_384
 from pathlib import Path
 from collections import OrderedDict
 from datetime import datetime
@@ -101,25 +102,45 @@ def load_checkpoint(path):
     return state_dict
 
 
-def load_model(model_arch, num_classes, checkpoint_path):
+def load_model(model_arch, num_classes, checkpoint_path, training=False):
     if model_arch == 'ViT_b16_224':
-        model_kwargs = dict(patch_size=16, embed_dim=768, depth=12, num_heads=12)
-        model = _create_vision_transformer('vit_base_patch16_224',
-                                           pretrained=True, num_classes=num_classes, **model_kwargs)
+        if training == False:
+            model = vit_base_patch16_224(pretrained=True)
+        # Used in fine-tuning
+        else:
+            model_kwargs = dict(patch_size=16, embed_dim=768, depth=12, num_heads=12)
+            model = _create_vision_transformer('vit_base_patch16_224',
+                                            pretrained=True, num_classes=num_classes, **model_kwargs)
     elif model_arch == 'ViT_l16_224':
-        model_kwargs = dict(patch_size=16, embed_dim=1024, depth=24, num_heads=16)
-        model = _create_vision_transformer('vit_large_patch16_224',
-                                           pretrained=True, num_classes=num_classes, **model_kwargs)
+        if training == False:
+            model = vit_large_patch16_224(pretrained=True)
+        # Used in fine-tuning
+        else:
+            model_kwargs = dict(patch_size=16, embed_dim=1024, depth=24, num_heads=16)
+            model = _create_vision_transformer('vit_large_patch16_224',
+                                               pretrained=True, num_classes=num_classes, **model_kwargs)
     elif model_arch == 'ViT_b32_384':
-        model_kwargs = dict(patch_size=32, embed_dim=768, depth=12, num_heads=12)
-        model = _create_vision_transformer('vit_base_patch32_384',
-                                           pretrained=True, num_classes=num_classes, **model_kwargs)
+        if training == False:
+            model_kwargs = {"img_size": 384}
+            model = vit_base_patch32_384(pretrained=True, **model_kwargs)
+        else:
+            model_kwargs = dict(patch_size=32, embed_dim=768, depth=12, num_heads=12)
+            model = _create_vision_transformer('vit_base_patch32_384',
+                                               pretrained=True, num_classes=num_classes, **model_kwargs)
     elif model_arch == 'ResNet50_224':
         model = create_model(model_name='swsl_resnet50', pretrained=True, num_classes=num_classes)
     # elif model_arch == 'ResNet20_32':
     #     model = torch.hub.load("chenyaofo/pytorch-cifar-models", "cifar10_resnet20", pretrained=True)
     elif model_arch == 'ViT_b32_224':
-        model = create_model(model_name="vit_base_patch32_224", pretrained=True, num_classes=num_classes)
+        model = vit_base_patch32_224(pretrained=True)
+        #model_kwargs = dict(patch_size=32, embed_dim=768, depth=12, num_heads=12)
+        #model = _create_vision_transformer("vit_base_patch32_224", 
+        #                                   pretrained=True, num_classes=num_classes, **model_kwargs)
+    elif model_arch == "ViT_s16_224":
+        model = vit_small_patch16_224(pretrained=True)
+        #model_kwargs = dict(patch_size=16, embed_dim=384, depth=12, num_heads=6)
+        #model = _create_vision_transformer("vit_small_patch16_224", 
+        #                                   pretrained=True, num_classes=num_classes, **model_kwargs)
     else:
         print(f'unknown model arch: {model_arch}')
         return None

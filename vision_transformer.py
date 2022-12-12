@@ -51,17 +51,18 @@ def _cfg(url='', **kwargs):
 default_cfgs = {
     # patch models (my experiments)
     'vit_small_patch16_224': _cfg(
-        url='https://github.com/rwightman/pytorch-image-models/releases/download/v0.1-weights/vit_small_p16_224-15ec54c9.pth',
-    ),
-
+        url='https://storage.googleapis.com/vit_models/augreg/'
+            'S_16-i21k-300ep-lr_0.001-aug_light1-wd_0.03-do_0.0-sd_0.0--imagenet2012-steps_20k-lr_0.03-res_224.npz'
+            ),
     # patch models (weights ported from official Google JAX impl)
     'vit_base_patch16_224': _cfg(
         url='https://github.com/rwightman/pytorch-image-models/releases/download/v0.1-vitjx/jx_vit_base_p16_224-80ecf9dd.pth',
         mean=(0.5, 0.5, 0.5), std=(0.5, 0.5, 0.5),
     ),
     'vit_base_patch32_224': _cfg(
-        url='',  # no official models weights for this combo, only for in21k
-        mean=(0.5, 0.5, 0.5), std=(0.5, 0.5, 0.5)),
+        url='https://storage.googleapis.com/vit_models/augreg/'
+            'B_32-i21k-300ep-lr_0.001-aug_medium1-wd_0.03-do_0.0-sd_0.0--imagenet2012-steps_20k-lr_0.03-res_224.npz'
+            ),
     'vit_base_patch16_384': _cfg(
         url='https://github.com/rwightman/pytorch-image-models/releases/download/v0.1-vitjx/jx_vit_base_p16_384-83fb41ba.pth',
         input_size=(3, 384, 384), mean=(0.5, 0.5, 0.5), std=(0.5, 0.5, 0.5), crop_pct=1.0),
@@ -461,6 +462,15 @@ def _create_vision_transformer(variant, pretrained=False, default_cfg=None, **kw
 
 @register_model
 def vit_small_patch16_224(pretrained=False, **kwargs):
+    """ ViT-Small (ViT-S/16)
+    NOTE I've replaced my previous 'small' model definition and weights with the small variant from the DeiT paper
+    """
+    model_kwargs = dict(patch_size=16, embed_dim=384, depth=12, num_heads=6, **kwargs)
+    model = _create_vision_transformer('vit_small_patch16_224', pretrained=pretrained, **model_kwargs)
+    return model
+
+'''
+def vit_small_patch16_224(pretrained=False, **kwargs):
     """ My custom 'small' ViT models. embed_dim=768, depth=8, num_heads=8, mlp_ratio=3.
     NOTE:
         * this differs from the DeiT based 'small' definitions with embed_dim=384, depth=12, num_heads=6
@@ -474,6 +484,7 @@ def vit_small_patch16_224(pretrained=False, **kwargs):
         model_kwargs.setdefault('qk_scale', 768 ** -0.5)
     model = _create_vision_transformer('vit_small_patch16_224', pretrained=pretrained, **model_kwargs)
     return model
+'''
 
 
 @register_model

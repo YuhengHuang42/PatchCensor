@@ -38,6 +38,7 @@ def get_train_config():
     parser.add_argument("--output-dir", type=str, default='output', help='output folder')
     parser.add_argument("--dataset", type=str, default='ImageNet', help="dataset for fine-tunning/evaluation")
     parser.add_argument("--num-classes", type=int, default=1000, help="number of classes in dataset")
+    parser.add_argument("--device", default=None, type=str, help="Specify which device to use")
     config = parser.parse_args()
 
     # models config
@@ -74,9 +75,12 @@ def train_epoch(epoch, model, data_loader, criterion, optimizer,
     metrics.reset()
 
     # training loop
-    for batch_idx, (batch_data, batch_target) in enumerate(data_loader):
-        batch_data = batch_data.to(device)
-        batch_target = batch_target.to(device)
+    for batch_idx, all_data in enumerate(data_loader):
+        path = all_data[2]
+        sample = all_data[0]
+        target = all_data[1]
+        batch_data = sample.to(device)
+        batch_target = target.to(device)
 
         optimizer.zero_grad()
         if masks is not None and isinstance(model, VisionTransformer):
@@ -115,10 +119,13 @@ def valid_epoch(epoch, model, data_loader, criterion, metrics, device=torch.devi
     acc5s = []
     # validation loop
     with torch.no_grad():
-        for batch_idx, (batch_data, batch_target) in enumerate(data_loader):
-            batch_data = batch_data.to(device)
-            batch_target = batch_target.to(device)
-
+        for batch_idx, all_data in enumerate(data_loader):
+            path = all_data[2]
+            sample = all_data[0]
+            target = all_data[1]
+            batch_data = sample.to(device)
+            batch_target = target.to(device)
+            
             if masks is not None and isinstance(model, VisionTransformer):
                 batch_size = batch_data.size(0)
                 img_mask, attn_mask = masks
@@ -169,8 +176,11 @@ def main():
     config = get_train_config()
 
     # device
-    device, device_ids = setup_device(config.n_gpu)
-
+    if config.device is None:
+        device, device_ids = setup_device(config.n_gpu)
+    else:
+        device = config.device
+        device_ids = [device]
     # tensorboard
     writer = TensorboardWriter(config.summary_dir, config.tensorboard)
 
@@ -181,7 +191,7 @@ def main():
 
     # create model
     print("create model")
-    model = load_model(config.model_arch, config.num_classes, config.checkpoint_path)
+    model = load_model(config.model_arch, config.num_classes, config.checkpoint_path, True)
 
     # send models to device
     model = model.to(device)
@@ -227,8 +237,11 @@ def main():
     )
 
     use_attn_mask = config.use_attn_mask
-    if use_attn_mask and config.mask_width > 0 and isinstance(model, VisionTransformer):
-        img_mask, attn_mask = gen_mask(img_size=224, patch_size=16, mask_width=config.mask_width)
+    if use_attn_mask and (config.mask_width > 0 or config.mask_size > 0) and isinstance(model, VisionTransformer):
+        if config.mask_size > 0:
+            img_mask, attn_mask = gen_mask(img_size=224, patch_size=16, mask_size=config.mask_size)
+        else:
+            img_mask, attn_mask = gen_mask(img_size=224, patch_size=16, mask_width=config.mask_width)
         img_mask, attn_mask = img_mask.to(device), attn_mask.to(device)
         masks = [img_mask, attn_mask]
     else:
