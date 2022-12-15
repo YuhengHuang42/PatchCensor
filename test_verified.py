@@ -164,12 +164,16 @@ def evaluate(model, config, device=torch.device('cpu')):
                 print(f'[WARNING] failed on {path}: {e}')
     else:
         num_samples = len(dl)
+        file_list = []
         for i, all_data in enumerate(dl):
             img = all_data[0]
             label = all_data[1]
-            file_name = all_data[2]
+            if "imagenet" in config.dataset.lower():
+                file_name = all_data[2]
+                file_list.append(file_name)
+            else:
+                file_name = None
             img = img.to(device)
-            file_list.append(file_name)
             majority_pred, verified, preds = verify_inference(model, img, img_mask, attn_mask, use_attn_mask)
             target = label[0].item()
             correct = preds[0].cpu().item() == target

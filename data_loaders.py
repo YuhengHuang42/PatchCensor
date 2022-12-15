@@ -79,7 +79,7 @@ class MNISTDataLoader(DataLoader):
 
 class CIFAR10DataLoader(DataLoader):
     def __init__(self, data_dir, split='train', image_size=224, mask_size=-1, 
-                 batch_size=16, num_workers=8, shuffle=None, skip=None):
+                 batch_size=16, num_workers=8, shuffle=None, skip=None, special_data_flag=None):
         if skip is not None:
             raise NotImplementedError
         if split == 'train':

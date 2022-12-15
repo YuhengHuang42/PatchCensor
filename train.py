@@ -76,7 +76,6 @@ def train_epoch(epoch, model, data_loader, criterion, optimizer,
 
     # training loop
     for batch_idx, all_data in enumerate(data_loader):
-        path = all_data[2]
         sample = all_data[0]
         target = all_data[1]
         batch_data = sample.to(device)
@@ -120,7 +119,6 @@ def valid_epoch(epoch, model, data_loader, criterion, metrics, device=torch.devi
     # validation loop
     with torch.no_grad():
         for batch_idx, all_data in enumerate(data_loader):
-            path = all_data[2]
             sample = all_data[0]
             target = all_data[1]
             batch_data = sample.to(device)
