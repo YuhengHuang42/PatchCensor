@@ -11,9 +11,15 @@ import torch
 import torch.nn as nn
 
 from data_loaders import *
+from data_loaders import GTSRBDataLoader
 from utils import setup_device, accuracy, MetricTracker, TensorboardWriter, ensure_dir, gen_mask, print_dict, load_model
 from vision_transformer import VisionTransformer
-
+from timm.scheduler import create_scheduler
+from datetime import datetime
+from dotmap import DotMap
+import transformers
+import math
+from timm.data import Mixup
 
 def get_train_config():
     parser = argparse.ArgumentParser("Vision Model Train/Fine-tune")
@@ -36,9 +42,12 @@ def get_train_config():
     parser.add_argument("--wd", type=float, default=1e-4, help='weight decay')
     parser.add_argument("--data-dir", type=str, default='../data', help='data folder')
     parser.add_argument("--output-dir", type=str, default='output', help='output folder')
-    parser.add_argument("--dataset", type=str, default='ImageNet', help="dataset for fine-tunning/evaluation")
+    parser.add_argument("--dataset", type=str, default='ImageNet', 
+                        choices=["GTSRB", "ImageNet", "CIFAR10", "CelebA", "FER2013", "FOOD101"], 
+                        help="dataset for fine-tunning/evaluation")
     parser.add_argument("--num-classes", type=int, default=1000, help="number of classes in dataset")
     parser.add_argument("--device", default=None, type=str, help="Specify which device to use")
+    parser.add_argument("--mixup_rate", type=float, default=None, help="the rate for mixup training")
     config = parser.parse_args()
 
     # models config
@@ -51,7 +60,9 @@ def process_config(config):
     print(' *************************************** ')
     print(' The experiment name is {} '.format(config.exp_name))
     print(' *************************************** ')
-
+    now = datetime.now()
+    dt_string = now.strftime("%d/%m/%Y %H:%M:%S")
+    print("Begin Experiment: timestamp:{}".format(dt_string))
     # add datetime postfix
     # timestamp = datetime.now().strftime('%y%m%d_%H%M%S')
     # exp_name = config.exp_name + '_{}_bs{}_lr{}_wd{}'.format(config.dataset, config.batch_size, config.lr, config.wd)
@@ -71,7 +82,7 @@ def process_config(config):
 
 
 def train_epoch(epoch, model, data_loader, criterion, optimizer,
-                lr_scheduler, metrics, device=torch.device('cpu'), masks=None):
+                lr_scheduler, metrics, device=torch.device('cpu'), masks=None, mixup_fn=None):
     metrics.reset()
 
     # training loop
@@ -80,6 +91,11 @@ def train_epoch(epoch, model, data_loader, criterion, optimizer,
         target = all_data[1]
         batch_data = sample.to(device)
         batch_target = target.to(device)
+        accuracy_compute_target = batch_target.clone()
+        if mixup_fn is not None:
+            if len(batch_data) % 2 == 0:
+                batch_data, batch_target = mixup_fn(batch_data, batch_target)
+                accuracy_compute_target = torch.max(batch_target, dim=-1).values
 
         optimizer.zero_grad()
         if masks is not None and isinstance(model, VisionTransformer):
@@ -98,7 +114,7 @@ def train_epoch(epoch, model, data_loader, criterion, optimizer,
         optimizer.step()
         lr_scheduler.step()
 
-        acc1, acc5 = accuracy(batch_pred, batch_target, topk=(1, 5))
+        acc1, acc5 = accuracy(batch_pred, accuracy_compute_target, topk=(1, 5)) # Accuracy is meaningless when applying mixup.
 
         metrics.writer.set_step((epoch - 1) * len(data_loader) + batch_idx)
         metrics.update('loss', loss.item())
@@ -190,6 +206,11 @@ def main():
     # create model
     print("create model")
     model = load_model(config.model_arch, config.num_classes, config.checkpoint_path, True)
+    if "vit" in config.model_arch.lower():
+        print("Using Vit")
+        model_type = "vit"
+    else:
+        model_type = "resnet"
 
     # send models to device
     model = model.to(device)
@@ -207,33 +228,58 @@ def main():
                     mask_size=config.mask_size,
                     batch_size=config.batch_size,
                     num_workers=config.num_workers,
-                    split='train')
+                    split='train',
+                    model_type=model_type)
     valid_dataloader = eval("{}DataLoader".format(config.dataset))(
                     data_dir=os.path.join(config.data_dir, dataset_dir),
                     image_size=config.image_size,
                     mask_size=config.mask_size,
                     batch_size=config.batch_size,
                     num_workers=config.num_workers,
-                    split='validation')
+                    split='validation',
+                    model_type=model_type)
 
     # training criterion
     print("create criterion and optimizer")
     criterion = nn.CrossEntropyLoss()
-
+    if model_type == "vit":
+        # https://github.com/rwightman/pytorch-image-models/issues/252#issuecomment-713838112
+        optimizer = torch.optim.AdamW(
+            params=model.parameters(),
+            lr=config.lr,
+            weight_decay=config.wd
+        )
+        training_step = len(train_dataloader) * config.train_epochs
+        warmup_step = math.floor(training_step * 0.1)
+        lr_scheduler = transformers.get_cosine_schedule_with_warmup(optimizer=optimizer, 
+                                                            num_warmup_steps=warmup_step,
+                                                            num_training_steps=training_step)
+        """
+        updates_per_epoch = len(train_dataloader)
+        scheduler_args = DotMap()
+        scheduler_args["sched"] = "cosine"
+        scheduler_args["num_epochs"] = config.train_epochs
+        scheduler_args["warmup_lr"] = 1e-6
+        lr_scheduler, num_epochs = create_scheduler(
+            args=scheduler_args,
+            optimizer=optimizer,
+            updates_per_epoch=updates_per_epoch,
+        )
+        """
+    else:
     # create optimizers and learning rate scheduler
-    optimizer = torch.optim.SGD(
-        params=model.parameters(),
-        lr=config.lr,
-        weight_decay=config.wd,
-        momentum=0.9)
-
-    lr_scheduler = torch.optim.lr_scheduler.OneCycleLR(
-        optimizer=optimizer,
-        max_lr=config.lr,
-        epochs=config.train_epochs,
-        steps_per_epoch = len(train_dataloader)
-    )
-
+        optimizer = torch.optim.SGD(
+            params=model.parameters(),
+            lr=config.lr,
+            weight_decay=config.wd,
+            momentum=0.9)
+        lr_scheduler = torch.optim.lr_scheduler.OneCycleLR(
+            optimizer=optimizer,
+            max_lr=config.lr,
+            epochs=config.train_epochs,
+            steps_per_epoch = len(train_dataloader)
+        )
+    
     use_attn_mask = config.use_attn_mask
     if use_attn_mask and (config.mask_width > 0 or config.mask_size > 0) and isinstance(model, VisionTransformer):
         if config.mask_size > 0:
@@ -246,6 +292,14 @@ def main():
         masks = None
 
     # start training
+    if config.mixup_rate is not None:
+        mixup_args = dict(
+            mixup_alpha=config.mixup_rate,
+            num_classes=config.num_classes
+        )
+        mixup_fn = Mixup(**mixup_args)
+    else:
+        mixup_fn = None
     print("start training")
     best_acc = 0.0
     epochs = config.train_epochs
@@ -255,7 +309,8 @@ def main():
         # train the models
         model.train()
         result = train_epoch(epoch, model, train_dataloader, criterion,
-                             optimizer, lr_scheduler, train_metrics, device, masks=masks)
+                             optimizer, lr_scheduler, train_metrics, device, masks=masks,
+                             mixup_fn=mixup_fn)
         log.update(result)
 
         # validate the models
@@ -271,7 +326,7 @@ def main():
             best = True
 
         # save models
-        save_model(config.checkpoint_dir, epoch, model, optimizer, lr_scheduler, device_ids, best)
+        save_model(config.checkpoint_dir, epoch, model, optimizer, lr_scheduler, device_ids, best, False)
 
         # print logged informations to the screen
         for key, value in log.items():
@@ -280,4 +335,7 @@ def main():
 
 if __name__ == '__main__':
     main()
+    now = datetime.now()
+    dt_string = now.strftime("%d/%m/%Y %H:%M:%S")
+    print("End Experiment: timestamp:{}".format(dt_string))
 
