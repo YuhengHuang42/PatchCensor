@@ -92,7 +92,7 @@ def evaluate(model, config, device=torch.device('cpu')):
         special_data_flag = "PartImageNet"
     else:
         dataset_dir = config.dataset
-        split="validation"
+        split="test"
         loader_name = config.dataset
         special_data_flag = None
     dl = eval("{}DataLoader".format(loader_name))(

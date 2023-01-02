@@ -36,8 +36,7 @@ model_names = sorted(name for name in models.__dict__
     and callable(models.__dict__[name]))
 
 parser = argparse.ArgumentParser(description='PyTorch ImageNet Training')
-parser.add_argument('--data-dir', metavar='DIR',
-                    help='path to dataset')
+parser.add_argument('--data-dir', metavar='DIR', help='path to dataset')
 parser.add_argument('--save_dir', type=str, help="The path for saving the trained models")
 parser.add_argument('-a', '--arch', metavar='ARCH', default='bagnet17')#,
                     #choices=model_names,
@@ -300,7 +299,7 @@ def main_worker(gpu, ngpus_per_node, args):
 
         if not args.multiprocessing_distributed or (args.multiprocessing_distributed
                 and args.rank % ngpus_per_node == 0):
-            file_name = os.path.join(args.save_dir, "{}_best_lr{}.pth.tar".format(args.arch, epoch, args.lr))
+            file_name = os.path.join(args.save_dir, "{}_best_lr{}.pth.tar".format(args.arch, args.lr))
             save_checkpoint({
                 'epoch': epoch + 1,
                 'arch': args.arch,

@@ -92,13 +92,13 @@ def forward_soft_parallel(inpt,net,block_size,num_classes,threshhold):
 	return softout,hardclass
 
 
-def predict_and_certify(inpt, net,block_size, size_to_certify, num_classes, threshold=0.0):
-	predictions = torch.zeros(inpt.size(0), num_classes).type(torch.int).cuda()
+def predict_and_certify(inpt, net,block_size, size_to_certify, num_classes, device="cuda:0", threshold=0.0):
+	predictions = torch.zeros(inpt.size(0), num_classes).type(torch.int).to(device)
 	batch = inpt.permute(0,2,3,1) #color channel last
 	for pos in range(batch.shape[2]):
 
-		out_c1 = torch.zeros(batch.shape).cuda()
-		out_c2 = torch.zeros(batch.shape).cuda()
+		out_c1 = torch.zeros(batch.shape).to(device)
+		out_c2 = torch.zeros(batch.shape).to(device)
 		if  (pos+block_size > batch.shape[2]):
 			out_c1[:,:,pos:] = batch[:,:,pos:]
 			out_c2[:,:,pos:] = 1. - batch[:,:,pos:]
@@ -115,7 +115,7 @@ def predict_and_certify(inpt, net,block_size, size_to_certify, num_classes, thre
 		softmx = torch.nn.functional.softmax(net(out),dim=1)
 		#thresh, predicted = torch.nn.functional.softmax(net(out),dim=1).max(1)
 		#print(thresh)
-		predictions += (softmx >= threshold).type(torch.int).cuda()
+		predictions += (softmx >= threshold).type(torch.int).to(device)
 	predinctionsnp = predictions.cpu().numpy()
 	idxsort = numpy.argsort(-predinctionsnp,axis=1,kind='stable')
 	valsort = -numpy.sort(-predinctionsnp,axis=1,kind='stable')
@@ -124,8 +124,8 @@ def predict_and_certify(inpt, net,block_size, size_to_certify, num_classes, thre
 	valsecond =  valsort[:,1]
 	idxsecond =  idxsort[:,1] 
 	num_affected_classifications=(size_to_certify + block_size -1)
-	cert = torch.tensor(((val - valsecond >2*num_affected_classifications) | ((val - valsecond ==2*num_affected_classifications)&(idx < idxsecond)))).cuda()
-	return torch.tensor(idx).cuda(), cert
+	cert = torch.tensor(((val - valsecond >2*num_affected_classifications) | ((val - valsecond ==2*num_affected_classifications)&(idx < idxsecond)))).to(device)
+	return torch.tensor(idx).to(device), cert
 #binom test(nA, nA + nB, p)
 
 def batch_choose(n,k,batches):

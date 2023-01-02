@@ -102,13 +102,13 @@ def load_checkpoint(path):
 
 def load_model(model_arch, num_classes, checkpoint_path, training=False):
     if model_arch == 'ViT_b16_224':
-        if training == False:
-            model = vit_base_patch16_224(pretrained=True)
+        #if training == False:
+        #    model = vit_base_patch16_224(pretrained=True)
         # Used in fine-tuning
-        else:
-            model_kwargs = dict(patch_size=16, embed_dim=768, depth=12, num_heads=12)
-            model = _create_vision_transformer('vit_base_patch16_224',
-                                            pretrained=True, num_classes=num_classes, **model_kwargs)
+        #else:
+        model_kwargs = dict(patch_size=16, embed_dim=768, depth=12, num_heads=12)
+        model = _create_vision_transformer('vit_base_patch16_224',
+                                        pretrained=True, num_classes=num_classes, **model_kwargs)
     elif model_arch == 'ViT_l16_224':
         if training == False:
             model = vit_large_patch16_224(pretrained=True)
