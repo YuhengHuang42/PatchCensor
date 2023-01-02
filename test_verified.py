@@ -33,6 +33,7 @@ def get_train_config():
     parser.add_argument("--no-verify", action='store_true', default=False, help="test without verification")
     parser.add_argument("--result", type=str, default=None, help="where to save the result")
     parser.add_argument("--skip", default=None, type=int, help="number of example to skip")
+    parser.add_argument("--device", default=None, type=str, help="Specify which device to use")
     #parser.add_argument("--num_subset", default=None, type=int, help="Only sample a subset of the dataset with length to num_subset")
     config = parser.parse_args()
 
@@ -261,8 +262,14 @@ def evaluate_no_verify(model, config, device=torch.device('cpu')):
 def main():
     config = get_train_config()
 
+    if config.device is None:
+        device, device_ids = setup_device(config.n_gpu)
+    else:
+        device = config.device
+        device_ids = [device]
+        
     # device
-    device, device_ids = setup_device(config.n_gpu)
+    #device, device_ids = setup_device(config.n_gpu)
 
     # create model
     print("create model")
